@@ -1,8 +1,8 @@
 # PHP Splay Tree Implementation
 
-![PHP Version](https://img.shields.io/packagist/php-v/willvincent/splay-tree.svg)
+![PHP Version](https://img.shields.io/badge/PHP-8.2%2B-blue.svg)
 ![License](https://img.shields.io/badge/license-MIT-blue.svg)
-![Latest Version](https://img.shields.io/packagist/v/willvincent/splay-tree.svg)
+![Latest Version](https://img.shields.io/packagist/v/willvincent/splaytree.svg)
 
 A robust and efficient [Splay Tree](https://en.wikipedia.org/wiki/Splay_tree) implementation in PHP,
 designed for scenarios where frequently accessed elements should be quickly retrievable.
