@@ -26,10 +26,9 @@ jobs:
           coverage: pcov
           tools: phpstan, phpunit
       - name: Install dependencies
-        uses: php-actions/composer@v6
+        run: composer install --no-interaction --optimize-autoloader
       - name: PHP Lint
-        run: |
-          find src tests -name "*.php" -exec php -l {} \;
+        run: find src tests -name "*.php" -exec php -l {} \;
       - name: PHPStan Static Analysis
         uses: php-actions/phpstan@v3
       - name: PHPUnit
