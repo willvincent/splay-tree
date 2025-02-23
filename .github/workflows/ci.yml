@@ -30,6 +30,6 @@ jobs:
       - name: PHP Lint
         run: find src tests -name "*.php" -exec php -l {} \;
       - name: PHPStan Static Analysis
-        uses: php-actions/phpstan@v3
+        run: phpstan --configuration=./phpstan.neon
       - name: PHPUnit
-        uses: php-actions/phpunit@v3
+        run: phpunit --configuration ./phpunit.xml
