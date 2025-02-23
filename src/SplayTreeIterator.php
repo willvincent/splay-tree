@@ -1,22 +1,33 @@
 <?php
 
+declare(strict_types=1);
+
 namespace SplayTree;
 
 use Iterator;
-use ReturnTypeWillChange;
-use SplayTree\Node;
 
-class SplayTreeIterator implements Iterator {
-    private $root;
-    private $stack = [];
-    private $position = 0;
+/**
+ * @implements Iterator<int, ?Node>
+ */
+final class SplayTreeIterator implements Iterator
+{
+    private ?Node $root;
 
-    public function __construct(?Node $root) {
+    /**
+     * @var array<Node|null>
+     */
+    private array $stack = [];
+
+    private int $position = 0;
+
+    public function __construct(?Node $root)
+    {
         $this->root = $root;
         $this->rewind();
     }
 
-    public function rewind(): void {
+    public function rewind(): void
+    {
         $this->stack = [];
         $this->position = 0;
         $node = $this->root;
@@ -26,23 +37,26 @@ class SplayTreeIterator implements Iterator {
         }
     }
 
-    #[ReturnTypeWillChange]
-    public function current() {
+    public function current(): ?Node
+    {
         if (empty($this->stack)) {
             return null;
         }
-        return $this->stack[count($this->stack) - 1]->data;
+
+        return $this->stack[count($this->stack) - 1];
     }
 
-    public function key(): int {
+    public function key(): int
+    {
         return $this->position;
     }
 
-    public function next(): void {
-        if (!empty($this->stack)) {
+    public function next(): void
+    {
+        if (! empty($this->stack)) {
             $node = array_pop($this->stack);
             $this->position++;
-            $node = $node->right;
+            $node = $node ? $node->right : null;
             while ($node !== null) {
                 $this->stack[] = $node;
                 $node = $node->left;
@@ -50,7 +64,8 @@ class SplayTreeIterator implements Iterator {
         }
     }
 
-    public function valid(): bool {
-        return !empty($this->stack);
+    public function valid(): bool
+    {
+        return ! empty($this->stack);
     }
 }

@@ -1,21 +1,24 @@
 <?php
 
+declare(strict_types=1);
+
 namespace SplayTree;
 
 use Exception;
 use IteratorAggregate;
-use SplayTree\Node;
-use SplayTree\SplayTreeIterator;
 
-class SplayTree implements IteratorAggregate
+/**
+ * @implements IteratorAggregate<int, ?Node>
+ */
+final class SplayTree implements IteratorAggregate
 {
-    private $root;
+    private ?Node $root;
 
-    private $size = 0;
+    private int $size = 0;
 
-    private $comparator;
+    private mixed $comparator;
 
-    public function __construct(callable $comparator = null)
+    public function __construct(?callable $comparator = null)
     {
         $this->root = null;
         $this->size = 0;
@@ -24,10 +27,11 @@ class SplayTree implements IteratorAggregate
         };
     }
 
-    private function rotateLeft(Node $node): Node {
+    private function rotateLeft(Node $node): Node
+    {
         $temp = $node->right;
         if ($temp === null) {
-            throw new Exception("Cannot rotate left: right child is null");
+            throw new Exception('Cannot rotate left: right child is null');
         }
 
         // Update the node's right child
@@ -53,10 +57,11 @@ class SplayTree implements IteratorAggregate
         return $temp;
     }
 
-    private function rotateRight(Node $node): Node {
+    private function rotateRight(Node $node): Node
+    {
         $temp = $node->left;
         if ($temp === null) {
-            throw new Exception("Cannot rotate right: left child is null");
+            throw new Exception('Cannot rotate right: left child is null');
         }
 
         // Update the node's left child
@@ -82,7 +87,8 @@ class SplayTree implements IteratorAggregate
         return $temp;
     }
 
-    private function splay(Node $node): void {
+    private function splay(Node $node): void
+    {
         while ($node->parent !== null) {
             $parent = $node->parent;
             $grandparent = $parent->parent;
@@ -115,10 +121,12 @@ class SplayTree implements IteratorAggregate
         $this->root = $node;
     }
 
-    public function insert($data): void {
+    public function insert(mixed $data): void
+    {
         if ($this->root === null) {
             $this->root = new Node($data);
             $this->size = 1;
+
             return;
         }
 
@@ -151,7 +159,8 @@ class SplayTree implements IteratorAggregate
         }
     }
 
-    public function search($data) {
+    public function search(mixed $data): mixed
+    {
         if ($this->root === null) {
             return null;
         }
@@ -164,7 +173,8 @@ class SplayTree implements IteratorAggregate
             $cmp = call_user_func($this->comparator, $data, $node->data);
             if ($cmp === 0) {
                 $this->splay($node);
-                return $this->root->data;
+
+                return $this->root ? $this->root->data : null;
             } elseif ($cmp < 0) {
                 $node = $node->left;
             } else {
@@ -175,10 +185,12 @@ class SplayTree implements IteratorAggregate
         if ($lastNode !== null) {
             $this->splay($lastNode);
         }
+
         return null;
     }
 
-    public function delete($data): void {
+    public function delete(mixed $data): void
+    {
         $node = $this->searchNode($data);
         if ($node === null) {
             return; // Node not found, nothing to delete
@@ -187,13 +199,13 @@ class SplayTree implements IteratorAggregate
         $this->splay($node);
         $root = $this->root;
 
-        if ($root->left === null) {
+        if ($root && $root->left === null) {
             // Case 1: No left child
             $this->root = $root->right;
             if ($this->root !== null) {
                 $this->root->parent = null;
             }
-        } elseif ($root->right === null) {
+        } elseif ($root && $root->right === null) {
             // Case 2: No right child
             $this->root = $root->left;
             if ($this->root !== null) {
@@ -201,8 +213,8 @@ class SplayTree implements IteratorAggregate
             }
         } else {
             // Case 3: Two children
-            $leftSubtree = $root->left;
-            $rightSubtree = $root->right;
+            $leftSubtree = $root ? $root->left : null;
+            $rightSubtree = $root ? $root->right : null;
             $leftSubtree->parent = null;
             $rightSubtree->parent = null;
             $this->root = $this->mergeSubtrees($leftSubtree, $rightSubtree);
@@ -210,7 +222,8 @@ class SplayTree implements IteratorAggregate
         $this->size--;
     }
 
-    private function mergeSubtrees(Node $left, Node $right): Node {
+    private function mergeSubtrees(Node $left, Node $right): Node
+    {
         $maxLeft = $left;
         while ($maxLeft->right !== null) {
             $maxLeft = $maxLeft->right;
@@ -220,10 +233,12 @@ class SplayTree implements IteratorAggregate
         if ($right !== null) {
             $right->parent = $maxLeft;
         }
+
         return $maxLeft;
     }
 
-    public function min() {
+    public function min(): mixed
+    {
         if ($this->root === null) {
             return null;
         }
@@ -233,10 +248,12 @@ class SplayTree implements IteratorAggregate
             $node = $node->left;
         }
         $this->splay($node);
-        return $this->root->data;
+
+        return $this->root ? $this->root->data : null;
     }
 
-    public function max() {
+    public function max(): mixed
+    {
         if ($this->root === null) {
             return null;
         }
@@ -246,10 +263,12 @@ class SplayTree implements IteratorAggregate
             $node = $node->right;
         }
         $this->splay($node);
-        return $this->root->data;
+
+        return $this->root ? $this->root->data : null;
     }
 
-    public function next($data) {
+    public function next(mixed $data): mixed
+    {
         $node = $this->searchNode($data);
         if ($node === null) {
             return null;
@@ -257,12 +276,15 @@ class SplayTree implements IteratorAggregate
         $successor = $this->findSuccessor($node);
         if ($successor !== null) {
             $this->splay($successor);
-            return $this->root->data;
+
+            return $this->root ? $this->root->data : null;
         }
+
         return null;
     }
 
-    public function prev($data) {
+    public function prev(mixed $data): mixed
+    {
         $node = $this->searchNode($data);
         if ($node === null) {
             return null;
@@ -270,17 +292,21 @@ class SplayTree implements IteratorAggregate
         $predecessor = $this->findPredecessor($node);
         if ($predecessor !== null) {
             $this->splay($predecessor);
-            return $this->root->data;
+
+            return $this->root ? $this->root->data : null;
         }
+
         return null;
     }
 
-    private function findSuccessor(Node $node): ?Node {
+    private function findSuccessor(Node $node): ?Node
+    {
         if ($node->right !== null) {
             $successor = $node->right;
             while ($successor->left !== null) {
                 $successor = $successor->left;
             }
+
             return $successor;
         }
 
@@ -289,15 +315,18 @@ class SplayTree implements IteratorAggregate
             $node = $ancestor;
             $ancestor = $ancestor->parent;
         }
+
         return $ancestor;
     }
 
-    private function findPredecessor(Node $node): ?Node {
+    private function findPredecessor(Node $node): ?Node
+    {
         if ($node->left !== null) {
             $predecessor = $node->left;
             while ($predecessor->right !== null) {
                 $predecessor = $predecessor->right;
             }
+
             return $predecessor;
         }
 
@@ -306,10 +335,12 @@ class SplayTree implements IteratorAggregate
             $node = $ancestor;
             $ancestor = $ancestor->parent;
         }
+
         return $ancestor;
     }
 
-    private function searchNode($data): ?Node {
+    private function searchNode(mixed $data): ?Node
+    {
         $node = $this->root;
         while ($node !== null) {
             $cmp = call_user_func($this->comparator, $data, $node->data);
@@ -321,10 +352,12 @@ class SplayTree implements IteratorAggregate
                 $node = $node->right;
             }
         }
+
         return null;
     }
 
-    public function contains($data): bool {
+    public function contains(mixed $data): bool
+    {
         $node = $this->root;
         while ($node !== null) {
             $cmp = call_user_func($this->comparator, $data, $node->data);
@@ -336,16 +369,18 @@ class SplayTree implements IteratorAggregate
                 $node = $node->right;
             }
         }
+
         return false;
     }
 
-    public function hasCycle(): bool {
+    public function hasCycle(): bool
+    {
         if ($this->root === null) {
             return false;
         }
         $visited = []; // Array to track visited nodes
         $stack = [$this->root];
-        while (!empty($stack)) {
+        while (! empty($stack)) {
             $node = array_pop($stack);
             if (in_array($node, $visited, true)) { // Strict comparison
                 return true; // Cycle detected
@@ -358,27 +393,33 @@ class SplayTree implements IteratorAggregate
                 $stack[] = $node->right;
             }
         }
+
         return false;
     }
 
-    public function clear(): void {
+    public function clear(): void
+    {
         $this->root = null;
         $this->size = 0;
     }
 
-    public function isEmpty(): bool {
+    public function isEmpty(): bool
+    {
         return $this->root === null;
     }
 
-    public function getRoot() {
+    public function getRoot(): mixed
+    {
         return $this->root ? $this->root->data : null;
     }
 
-    public function getSize(): int {
+    public function getSize(): int
+    {
         return $this->size;
     }
 
-    public function setRoot(Node $node) {
+    public function setRoot(Node $node): void
+    {
         $this->root = $node;
     }
 
@@ -387,21 +428,27 @@ class SplayTree implements IteratorAggregate
         return new SplayTreeIterator($this->root);
     }
 
-    public function toString(int $maxDepth = 100): string {
+    public function toString(int $maxDepth = 100): string
+    {
         // Using an array as PHP doesn't have a built-in HashSet
         $visited = [];
+
         return $this->toStringHelper($this->root, 0, $maxDepth, $visited);
     }
 
-    private function toStringHelper(?Node $node, int $depth, int $maxDepth, array &$visited): string {
+    /**
+     * @param  Node[]  $visited
+     */
+    private function toStringHelper(?Node $node, int $depth, int $maxDepth, array &$visited): string
+    {
         // Base case: null node
         if ($node === null) {
-            return "";
+            return '';
         }
 
         // Check for depth limit or cycle
         if ($depth > $maxDepth || in_array($node, $visited, true)) {
-            return "[Cycle or Depth Limit Reached]";
+            return '[Cycle or Depth Limit Reached]';
         }
 
         // Add current node to visited array
@@ -410,7 +457,7 @@ class SplayTree implements IteratorAggregate
         // Recursively build string: left subtree + current value + right subtree
         $string = [];
         $string[] = $this->toStringHelper($node->left, $depth + 1, $maxDepth, $visited);
-        $string[] = (string)$node->data;
+        $string[] = (string) $node->data;
         $string[] = $this->toStringHelper($node->right, $depth + 1, $maxDepth, $visited);
 
         return implode(', ', array_filter($string));

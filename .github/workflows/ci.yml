@@ -1,0 +1,37 @@
+name: CI
+on:
+  push:
+  pull_request:
+    branches:
+      - master
+    types:
+      - opened
+      - synchronize
+
+
+jobs:
+  run:
+    runs-on: ${{ matrix.operating-system }}
+    strategy:
+      matrix:
+        operating-system: [ 'ubuntu-latest', 'windows-latest', 'macos-latest' ]
+        php-versions: [ '8.2', '8.3', '8.4' ]
+    build-test:
+      steps:
+        - name: Checkout Code
+          uses: actions/checkout@v4
+        - name: Setup PHP
+          uses: shivammathur/setup-php@v2
+          with:
+            php-version: {{ matrix.php-versions }}
+            coverage: pcov
+            tools: phpstan, phpunit
+        - name: Install dependencies
+          uses: php-actions/composer@v6
+        - name: PHP Lint
+          run: |
+            find src tests -name "*.php" -exec php -l {} \;
+        - name: PHPStan Static Analysis
+          uses: php-actions/phpstan@v3
+        - name: PHPUnit
+          uses: php-actions/phpunit@v3

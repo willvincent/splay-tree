@@ -2,7 +2,6 @@
 
 namespace tests;
 
-
 use PHPUnit\Framework\TestCase;
 use SplayTree\SplayTree;
 
@@ -11,9 +10,9 @@ class SplayTreeTest extends TestCase
     /**
      * Test basic insertion and search functionality, including splaying.
      */
-    public function testBasicInsertAndSearch()
+    public function test_basic_insert_and_search(): void
     {
-        $tree = new SplayTree();
+        $tree = new SplayTree;
         $tree->insert(5);
         $tree->insert(3);
         $tree->insert(7);
@@ -32,9 +31,9 @@ class SplayTreeTest extends TestCase
     /**
      * Test that inserting duplicates does not increase the tree size.
      */
-    public function testInsertDuplicates()
+    public function test_insert_duplicates(): void
     {
-        $tree = new SplayTree();
+        $tree = new SplayTree;
         $tree->insert(5);
         $tree->insert(5); // Duplicate
 
@@ -45,9 +44,9 @@ class SplayTreeTest extends TestCase
     /**
      * Test deletion of nodes and tree consistency.
      */
-    public function testDeleteOperations()
+    public function test_delete_operations(): void
     {
-        $tree = new SplayTree();
+        $tree = new SplayTree;
         $tree->insert(5);
         $tree->insert(3);
         $tree->insert(7);
@@ -69,9 +68,9 @@ class SplayTreeTest extends TestCase
     /**
      * Test edge cases like empty tree operations.
      */
-    public function testEdgeCases()
+    public function test_edge_cases(): void
     {
-        $tree = new SplayTree();
+        $tree = new SplayTree;
 
         // Insert into empty tree
         $tree->insert(1);
@@ -89,9 +88,9 @@ class SplayTreeTest extends TestCase
     /**
      * Test min and max operations, including splaying.
      */
-    public function testMinAndMax()
+    public function test_min_and_max(): void
     {
-        $tree = new SplayTree();
+        $tree = new SplayTree;
         $tree->insert(5);
         $tree->insert(3);
         $tree->insert(7);
@@ -110,9 +109,9 @@ class SplayTreeTest extends TestCase
     /**
      * Test next and prev operations for finding successors and predecessors.
      */
-    public function testNextAndPrev()
+    public function test_next_and_prev(): void
     {
-        $tree = new SplayTree();
+        $tree = new SplayTree;
         for ($i = 1; $i <= 5; $i++) {
             $tree->insert($i);
         }
@@ -126,9 +125,9 @@ class SplayTreeTest extends TestCase
     /**
      * Test size tracking after insertions and deletions.
      */
-    public function testSizeTracking()
+    public function test_size_tracking(): void
     {
-        $tree = new SplayTree();
+        $tree = new SplayTree;
         $this->assertEquals(0, $tree->getSize());
 
         $tree->insert(1);
@@ -147,9 +146,9 @@ class SplayTreeTest extends TestCase
     /**
      * Test clearing the tree.
      */
-    public function testClearOperation()
+    public function test_clear_operation(): void
     {
-        $tree = new SplayTree();
+        $tree = new SplayTree;
         $tree->insert(1);
         $tree->insert(2);
         $tree->clear();
@@ -162,9 +161,9 @@ class SplayTreeTest extends TestCase
     /**
      * Test contains method for checking existence without splaying.
      */
-    public function testContainsMethod()
+    public function test_contains_method(): void
     {
-        $tree = new SplayTree();
+        $tree = new SplayTree;
         $tree->insert(5);
         $tree->insert(3);
         $tree->insert(7);
@@ -177,14 +176,14 @@ class SplayTreeTest extends TestCase
     /**
      * Test toString method for string representation.
      */
-    public function testToString()
+    public function test_to_string(): void
     {
-        $tree = new SplayTree();
+        $tree = new SplayTree;
         $tree->insert(5);
         $tree->insert(3);
         $tree->insert(7);
 
-        $this->assertFalse($tree->hasCycle(), "Cycle detected in the tree");
+        $this->assertFalse($tree->hasCycle(), 'Cycle detected in the tree');
 
         $str = $tree->toString();
 
@@ -194,9 +193,9 @@ class SplayTreeTest extends TestCase
     /**
      * Test iterator for in-order traversal.
      */
-    public function testIterator()
+    public function test_iterator(): void
     {
-        $tree = new SplayTree();
+        $tree = new SplayTree;
         $tree->insert(5);
         $tree->insert(3);
         $tree->insert(7);
@@ -205,11 +204,11 @@ class SplayTreeTest extends TestCase
         $tree->insert(6);
         $tree->insert(8);
 
-        $this->assertFalse($tree->hasCycle(), "Cycle detected in the tree");
+        $this->assertFalse($tree->hasCycle(), 'Cycle detected in the tree');
 
         $elements = [];
-        foreach ($tree as $data) {
-            $elements[] = $data;
+        foreach ($tree as $node) {
+            $elements[] = $node ? $node->data : null;
         }
 
         $this->assertEquals([2, 3, 4, 5, 6, 7, 8], $elements);
@@ -218,7 +217,7 @@ class SplayTreeTest extends TestCase
     /**
      * Test custom comparator with objects.
      */
-    public function testObjectComparator()
+    public function test_object_comparator(): void
     {
         $comparator = function ($a, $b) {
             return $a->value <=> $b->value;
@@ -246,9 +245,9 @@ class SplayTreeTest extends TestCase
  */
 class TestObject
 {
-    public $value;
+    public mixed $value;
 
-    public function __construct($value)
+    public function __construct(mixed $value)
     {
         $this->value = $value;
     }

@@ -1,14 +1,21 @@
 <?php
 
+declare(strict_types=1);
+
 namespace SplayTree;
 
-class Node {
-    public $data;
-    public $left;
-    public $right;
-    public $parent;
+final class Node
+{
+    public mixed $data;
 
-    public function __construct($data) {
+    public mixed $left;
+
+    public mixed $right;
+
+    public mixed $parent;
+
+    public function __construct(mixed $data)
+    {
         $this->data = $data;
         $this->left = null;
         $this->right = null;
