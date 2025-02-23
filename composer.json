@@ -23,6 +23,6 @@
         "phpunit/phpunit": "^9.5"
     },
     "require": {
-        "php": "^8.2"
+        "php": ">=8.2"
     }
 }
