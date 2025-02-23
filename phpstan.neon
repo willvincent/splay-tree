@@ -1,0 +1,9 @@
+parameters:
+	level: 8
+	paths:
+		- src
+		- tests
+	treatPhpDocTypesAsCertain: false
+	reportUnmatchedIgnoredErrors: false
+	ignoreErrors:
+	    - identifier: notIdentical.alwaysTrue
