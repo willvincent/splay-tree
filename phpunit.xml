@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<phpunit
+        bootstrap="vendor/autoload.php"
+        colors="true"
+        verbose="true"
+        stopOnFailure="false">
+    <php>
+        <ini name="memory_limit" value="256M" />
+    </php>
+    <testsuites>
+        <testsuite name="SplayTree Tests">
+            <directory>tests</directory>
+        </testsuite>
+    </testsuites>
+</phpunit>

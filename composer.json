@@ -1,0 +1,28 @@
+{
+    "name": "willvincent/splaytree",
+    "description": "A flexible PHP splay-tree implementation.",
+    "type": "library",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "SplayTree\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "SplayTree\\Tests\\": "tests/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Will Vincent",
+            "email": "will@willvincent.com"
+        }
+    ],
+    "require-dev": {
+        "phpunit/phpunit": "^9.5"
+    },
+    "require": {
+        "php": "^8.2"
+    }
+}
