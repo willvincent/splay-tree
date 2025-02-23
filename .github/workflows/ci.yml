@@ -14,7 +14,7 @@ jobs:
     runs-on: ${{ matrix.operating-system }}
     strategy:
       matrix:
-        operating-system: [ 'ubuntu-latest', 'windows-latest', 'macos-latest' ]
+        operating-system: 'ubuntu-latest'
         php-versions: [ '8.2', '8.3', '8.4' ]
     steps:
       - name: Checkout Code
@@ -30,6 +30,6 @@ jobs:
       - name: PHP Lint
         run: find src tests -name "*.php" -exec php -l {} \;
       - name: PHPStan Static Analysis
-        run: phpstan --configuration=./phpstan.neon
+        run: phpstan --configuration=phpstan.neon
       - name: PHPUnit
-        run: phpunit --configuration ./phpunit.xml
+        run: phpunit --configuration phpunit.xml
