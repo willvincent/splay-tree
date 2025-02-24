@@ -121,7 +121,7 @@ final class SplayTree implements IteratorAggregate
         $this->root = $node;
     }
 
-    public function insert(mixed $data): ?Node
+    public function insert(mixed $data): Node
     {
         $newNode = new Node($data);
 
