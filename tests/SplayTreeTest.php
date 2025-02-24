@@ -225,8 +225,8 @@ class SplayTreeTest extends TestCase
         $obj = new TestObject(1);
 
         $node = $tree->insert($obj);
-        $this->assertTrue($node instanceof Node);
-        $this->assertTrue($node->data instanceof TestObject);
+        $this->assertInstanceOf(Node::class, $node);
+        $this->assertInstanceOf(TestObject::class, $node->data);
         $this->assertEquals($node->data, $obj);
     }
 
