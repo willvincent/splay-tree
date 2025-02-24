@@ -324,8 +324,8 @@ Operations like `search`, `insert`, or `delete` splay the accessed or modified n
 $tree->insert(3);
 $tree->insert(5);
 $tree->search(3); // Splays 3 to the root
-// Assuming getRoot() exists (for illustration):
-// echo $tree->getRoot(); // 3
+
+echo $tree->getRoot(); // 3
 ```
 
 ## Performance Considerations
