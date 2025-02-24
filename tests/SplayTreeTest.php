@@ -3,6 +3,7 @@
 namespace tests;
 
 use PHPUnit\Framework\TestCase;
+use SplayTree\Node;
 use SplayTree\SplayTree;
 
 class SplayTreeTest extends TestCase
@@ -212,6 +213,21 @@ class SplayTreeTest extends TestCase
         }
 
         $this->assertEquals([2, 3, 4, 5, 6, 7, 8], $elements);
+    }
+
+    /**
+     * Test that insert() returns the inserted node.
+     */
+    public function test_insert_returns_node(): void
+    {
+        $tree = new SplayTree;
+
+        $obj = new TestObject(1);
+
+        $node = $tree->insert($obj);
+        $this->assertTrue($node instanceof Node);
+        $this->assertTrue($node->data instanceof TestObject);
+        $this->assertEquals($node->data, $obj);
     }
 
     /**

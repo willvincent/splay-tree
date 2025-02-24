@@ -121,13 +121,15 @@ final class SplayTree implements IteratorAggregate
         $this->root = $node;
     }
 
-    public function insert(mixed $data): void
+    public function insert(mixed $data): ?Node
     {
+        $newNode = new Node($data);
+
         if ($this->root === null) {
-            $this->root = new Node($data);
+            $this->root = $newNode;
             $this->size = 1;
 
-            return;
+            return $newNode;
         }
 
         $node = $this->root;
@@ -135,7 +137,7 @@ final class SplayTree implements IteratorAggregate
             $cmp = call_user_func($this->comparator, $data, $node->data);
             if ($cmp < 0) {
                 if ($node->left === null) {
-                    $node->left = new Node($data);
+                    $node->left = $newNode;
                     $node->left->parent = $node;
                     $this->splay($node->left);
                     $this->size++;
@@ -144,7 +146,7 @@ final class SplayTree implements IteratorAggregate
                 $node = $node->left;
             } elseif ($cmp > 0) {
                 if ($node->right === null) {
-                    $node->right = new Node($data);
+                    $node->right = $newNode;
                     $node->right->parent = $node;
                     $this->splay($node->right);
                     $this->size++;
@@ -157,6 +159,8 @@ final class SplayTree implements IteratorAggregate
                 break;
             }
         }
+
+        return $newNode;
     }
 
     public function search(mixed $data): mixed
